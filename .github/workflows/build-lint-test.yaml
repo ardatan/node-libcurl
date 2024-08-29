@@ -20,25 +20,15 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - macos-11
-          # removed as we enabled CircleCI to run on PRs
-          # - ubuntu-20.04
+          - macos-latest
+          - ubuntu-latest
         libcurl-release:
           - 7.86.0
+          - 7.50.0
         node:
           - 18
           - 20
           - 21
-        include:
-          # we only want to run lint in one of the jobs, in this case, the one for the latest stable Node.js version
-          - os: macos-11
-            libcurl-release: 7.86.0
-            node: 18
-            run-lint-and-tsc: true
-          # we also want to build a job for old libcurl versions
-          - os: macos-11
-            libcurl-release: 7.50.0
-            node: 18
     env:
       LIBCURL_RELEASE: ${{ matrix.libcurl-release }}
       LATEST_LIBCURL_RELEASE: ${{ matrix.libcurl-release }}
@@ -81,6 +71,9 @@ jobs:
       - if: runner.os == 'Linux'
         name: Install Needed packages on Linux
         run: sudo apt-get install -y cmake
+      - if: runner.os == 'Windows'
+        name: Install Needed packages on Windows
+        uses: ilammy/setup-nasm@v1
       - name: Output yarn cache dir
         id: yarn-cache-dir
         run: echo "::set-output name=dir::$(yarn cache dir)"

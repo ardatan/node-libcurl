@@ -21,7 +21,6 @@ on:
         required: true
 
 env:
-  NODE_LIBCURL_GITHUB_TOKEN: ${{ secrets.NODE_LIBCURL_GITHUB_TOKEN }}
   PUBLISH_BINARY: ${{ github.event.inputs.publish-binary }}
   NODE_LIBCURL_CPP_STD: c++17
 
@@ -35,14 +34,17 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - macos-11
-          - ubuntu-20.04
+          - macos-latest
+          - macos-latest-large
+          - ubuntu-latest
+          - windows-latest
         libcurl-release:
           - 7.86.0
         node:
           - 18
           - 20
           - 21
+          - 22
     env:
       LIBCURL_RELEASE: ${{ matrix.libcurl-release }}
       LATEST_LIBCURL_RELEASE: ${{ matrix.libcurl-release }}
@@ -59,6 +61,9 @@ jobs:
             v1-${{ matrix.os }}-${{ matrix.libcurl-release }}-${{ matrix.node }}-${{ github.run_id }}-${{ github.job }}-
       - id: run_result
         run: cat run_result 2>/dev/null || echo 'default'
+      - if: runner.os == 'Windows'
+        name: Install Needed packages on Windows
+        uses: ilammy/setup-nasm@v1
       - if: runner.os == 'Linux'
         name: Install Needed packages on Linux
         run: |

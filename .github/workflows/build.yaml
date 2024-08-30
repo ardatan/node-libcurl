@@ -57,6 +57,10 @@ jobs:
           node-version: ${{ matrix.node }}
       - name: package tarball
         run: yarn pregyp package
+      - name: test package tarball
+        run: yarn pregyp testpackage
+      - name: test
+        run: yarn test
       - name: reveal staged tarball
         id: reveal_staged_tarball
         run: |

@@ -54,6 +54,8 @@ jobs:
           npm_config_curl_include_dirs: "${{ runner.os == 'macOS' && '$(xcrun --show-sdk-path)/usr/include' || '' }}"
         with:
           node-version: ${{ matrix.node }}
+      - name: package tarball
+        run: yarn pregyp package
       - name: reveal staged tarball
         id: reveal_staged_tarball
         run: |

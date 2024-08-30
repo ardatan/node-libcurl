@@ -206,9 +206,11 @@
               ['curl_include_dirs==""', {
                 'OTHER_CPLUSPLUSFLAGS' : [
                   '<!(<(curl_config_bin) --prefix)/include',
+                  '<!(xcrun --show-sdk-path)/usr/include',
                 ],
                 'OTHER_CFLAGS':[
                   '<!(<(curl_config_bin) --prefix)/include',
+                  '<!(xcrun --show-sdk-path)/usr/include',
                 ],
               }],
             ],

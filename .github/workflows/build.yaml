@@ -28,7 +28,8 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
         with:
-          submodules: recursive
+          # Required for curl-for-windows
+          submodules: ${{ runner.os == 'Windows' && 'recursive' || 'false' }}
       - name: Disable Windows Defender
         if: runner.os == 'Windows'
         run: Set-MpPreference -DisableRealtimeMonitoring $true

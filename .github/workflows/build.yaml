@@ -75,4 +75,4 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ${{ steps.reveal_staged_tarball.outputs.STAGED_TARBALL }}
           asset_name: ${{ steps.reveal_staged_tarball_name.outputs.STAGED_TARBALL_NAME }}
-          tag: v${{ steps.reveal_staged_tarball_name.outputs.PACKAGE_VERSION }}
+          tag: v${{ steps.reveal_package_version.outputs.PACKAGE_VERSION }}

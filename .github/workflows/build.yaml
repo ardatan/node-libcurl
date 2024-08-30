@@ -64,7 +64,7 @@ jobs:
       - name: reveal staged tarball name
         id: reveal_staged_tarball_name
         run: |
-          echo "STAGED_TARBALL_NAME=$(yarn --silent pregyp reveal staged_tarball --silent | awk -F'/' '{print $NF}'"  >> $GITHUB_OUTPUT
+          echo "STAGED_TARBALL_NAME=$(yarn --silent pregyp reveal staged_tarball --silent | awk -F'/' '{print $NF}') >> $GITHUB_OUTPUT
       - name: upload artifact
         id: upload_artifact
         uses: actions/upload-artifact@v4

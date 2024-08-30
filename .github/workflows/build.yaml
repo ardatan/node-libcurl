@@ -61,6 +61,7 @@ jobs:
         run: yarn pregyp testpackage
       - name: test
         run: yarn test
+        timeout-minutes: 10
       - name: reveal staged tarball
         id: reveal_staged_tarball
         run: |

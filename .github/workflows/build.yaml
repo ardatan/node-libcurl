@@ -65,14 +65,17 @@ jobs:
         id: reveal_staged_tarball
         run: |
           echo "STAGED_TARBALL=$(yarn --silent pregyp reveal staged_tarball --silent)" >> $GITHUB_OUTPUT
+        shell: bash
       - name: reveal staged tarball name
         id: reveal_staged_tarball_name
         run: |
           echo "STAGED_TARBALL_NAME=$(yarn --silent pregyp reveal package_name)" >> $GITHUB_OUTPUT
+        shell: bash
       - name: reveal package version
         id: reveal_package_version
         run: |
           echo "PACKAGE_VERSION=$(yarn --silent pregyp reveal version)" >> $GITHUB_OUTPUT
+        shell: bash
       - name: Publish to npm
         if: ${{ github.event_name == 'push' }}
         run: yarn publish --access public

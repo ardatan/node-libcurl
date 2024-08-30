@@ -85,12 +85,12 @@ $PYTHON -c "import distutils" || $PIP install setuptools
 # so we are making sure we remove those so they do not mess with our build
 if [[ -n "$CI" && "$(uname)" == "Darwin" ]]; then
   echo "include folder:"
-  ls -al /usr/local/include
+  ls -al $(xcrun --show-sdk-path)/usr/local/include
   echo "lib folder:"
-  ls -al /usr/local/lib
+  ls -al $(xcrun --show-sdk-path)/usr/local/lib
   # delete all libraries we are building on this file from /usr/local/lib
-  rm -rf /usr/local/include/{nghttp2,openssl,curl}
-  rm -rf     /usr/local/lib/{nghttp2,openssl,curl}
+  rm -rf $(xcrun --show-sdk-path)/usr/local/include/{nghttp2,openssl,curl}
+  rm -rf     $(xcrun --show-sdk-path)/usr/local/lib/{nghttp2,openssl,curl}
 fi
 
 # check for some common missing deps

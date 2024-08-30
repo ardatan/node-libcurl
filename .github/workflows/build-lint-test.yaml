@@ -45,7 +45,7 @@ jobs:
           restore-keys: |
             ${{ github.run_id }}-${{ github.job }}-
       - id: run_result
-        run: cat run_result 2>/dev/null || echo 'default'
+        run: "${{ runner.os == 'Windows' && 'Get-Content run_result -ErrorAction SilentlyContinue || Write-Output \"default\"' || 'cat run_result 2>/dev/null || echo \"default\"' }}"
       - name: Checkout
         uses: actions/checkout@main
       - name: Setup Node.js
@@ -155,7 +155,7 @@ jobs:
           restore-keys: |
             ${{ github.run_id }}-${{ github.job }}-
       - id: run_result
-        run: cat run_result 2>/dev/null || echo 'default'
+        run: "${{ runner.os == 'Windows' && 'Get-Content run_result -ErrorAction SilentlyContinue || Write-Output \"default\"' || 'cat run_result 2>/dev/null || echo \"default\"' }}"
       - run: echo "NODE_LIBCURL_CPP_STD=${{ matrix.node-libcurl-cpp-std }}" >> $GITHUB_ENV
         if: matrix.node-libcurl-cpp-std
       - name: Checkout

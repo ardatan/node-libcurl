@@ -60,7 +60,7 @@ jobs:
           restore-keys: |
             v1-${{ matrix.os }}-${{ matrix.libcurl-release }}-${{ matrix.node }}-${{ github.run_id }}-${{ github.job }}-
       - id: run_result
-        run: cat run_result 2>/dev/null || echo 'default'
+        run: "${{ runner.os == 'Windows' && 'Get-Content run_result -ErrorAction SilentlyContinue || Write-Output \"default\"' || 'cat run_result 2>/dev/null || echo \"default\"' }}"
       - if: runner.os == 'Windows'
         name: Install Needed packages on Windows
         uses: ilammy/setup-nasm@v1
@@ -169,7 +169,7 @@ jobs:
           restore-keys: |
             v1-${{ matrix.os }}-${{ matrix.libcurl-release }}-${{ matrix.electron-version }}-${{ github.run_id }}-${{ runner.os }}-${{ github.job }}-
       - id: run_result
-        run: cat run_result 2>/dev/null || echo 'default'
+        run: "${{ runner.os == 'Windows' && 'Get-Content run_result -ErrorAction SilentlyContinue || Write-Output \"default\"' || 'cat run_result 2>/dev/null || echo \"default\"' }}"
       - run: echo "NODE_LIBCURL_CPP_STD=${{ matrix.node-libcurl-cpp-std }}" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@main

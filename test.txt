@@ -1,0 +1,4 @@
+yarn run v1.22.22
+$ node-pre-gyp reveal staged_tarball
+build/stage/v4.0.0/node_libcurl-v4.0.0-node-v115-linux-x64-glibc.tar.gz
+Done in 0.09s.

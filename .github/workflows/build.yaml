@@ -22,107 +22,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          # linux
-          - os: ubuntu-latest
-            node: 18
-            node_abi: node-v108
-            platform: linux
-            arch: x64
-            libc: glibc
-          - os: ubuntu-latest
-            node: 20
-            node_abi: node-v115
-            platform: linux
-            arch: x64
-            libc: glibc
-          - os: ubuntu-latest
-            node: 21
-            node_abi: node-v120
-            platform: linux
-            arch: x64
-            libc: glibc
-          - os: ubuntu-latest
-            node: 22
-            node_abi: node-v127
-            platform: linux
-            arch: x64
-            libc: glibc
-        # windows
-          - os: windows-latest
-            node: 18
-            node_abi: node-v108
-            platform: win32
-            arch: x64
-            libc: unknown
-          - os: windows-latest
-            node: 20
-            node_abi: node-v115
-            platform: win32
-            arch: x64
-            libc: unknown
-          - os: windows-latest
-            node: 21
-            node_abi: node-v120
-            platform: win32
-            arch: x64
-            libc: unknown
-          - os: windows-latest
-            node: 22
-            node_abi: node-v127
-            platform: win32
-            arch: x64
-            libc: unknown
-        # regular macos
-          - os: macos-latest
-            node: 18
-            node_abi: node-v108
-            platform: darwin
-            arch: arm64
-            libc: unknown
-          - os: macos-latest
-            node: 20
-            node_abi: node-v115
-            platform: darwin
-            arch: arm64
-            libc: unknown
-          - os: macos-latest
-            node: 21
-            node_abi: node-v120
-            platform: darwin
-            arch: arm64
-            libc: unknown
-          - os: macos-latest
-            node: 22
-            node_abi: node-v127
-            platform: darwin
-            arch: arm64
-            libc: unknown
-        # m1
-          - os: macos-latest-large
-            node: 18
-            node_abi: node-v108
-            platform: darwin
-            arch: x64
-            libc: unknown
-          - os: macos-latest-large
-            node: 20
-            node_abi: node-v115
-            platform: darwin
-            arch: x64
-            libc: unknown
-          - os: macos-latest-large
-            node: 21
-            node_abi: node-v120
-            platform: darwin
-            arch: x64
-            libc: unknown
-          - os: macos-latest-large
-            node: 22
-            node_abi: node-v127
-            platform: darwin
-            arch: x64
-            libc: unknown
+        os: [ubuntu-latest, windows-latest, macos-latest, macos-latest-large]
+        node: [18, 20, 21, 22]
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -138,6 +39,9 @@ jobs:
       - name: Install NASM
         if: runner.os == 'Windows'
         uses: ilammy/setup-nasm@v1
+      - name: Configure curl-for-windows
+        if: runner.os == 'Windows'
+        run: python deps/curl-for-windows/configure.py
       - name: Install Required Libraries
         if: runner.os == 'Linux'
         run: sudo apt update && sudo apt install -y libcurl4-openssl-dev libssl-dev
@@ -150,10 +54,13 @@ jobs:
           npm_config_curl_include_dirs: "${{ runner.os == 'macOS' && '$(xcrun --show-sdk-path)/usr/include' || '' }}"
         with:
           node-version: ${{ matrix.node }}
+      - name: reveal staged tarball
+        id: reveal_staged_tarball
+        run: yarn --silent pregyp reveal staged_tarball --silent
       - name: upload artifact
         id: upload_artifact
         uses: actions/upload-artifact@v4
         with:
-          name: node-libcurl-v4.0.0-${{ matrix.node_abi }}-${{ matrix.platform }}-${{ matrix.arch }}-${{ matrix.libc }}
-          path: lib/binding/node_libcurl.node
+          name: ${{ steps.reveal_staged_tarball.outputs.staged_tarball }}
+          path: ${{ steps.reveal_staged_tarball.outputs.staged_tarball }}
           overwrite: true

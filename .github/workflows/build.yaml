@@ -1,0 +1,154 @@
+name: build
+
+on:
+  push:
+    tags:
+      - '*'
+    branches:
+      - master
+      - develop
+  workflow_dispatch:
+    inputs:
+      publish-binary:
+        type: boolean
+        default: false
+        description: Publish binary?
+        required: true
+
+
+jobs:
+  build-artifact:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # linux
+          - os: ubuntu-latest
+            node: 18
+            node_abi: node-v108
+            platform: linux
+            arch: x64
+            libc: glibc
+          - os: ubuntu-latest
+            node: 20
+            node_abi: node-v115
+            platform: linux
+            arch: x64
+            libc: glibc
+          - os: ubuntu-latest
+            node: 21
+            node_abi: node-v120
+            platform: linux
+            arch: x64
+            libc: glibc
+          - os: ubuntu-latest
+            node: 22
+            node_abi: node-v127
+            platform: linux
+            arch: x64
+            libc: glibc
+        # windows
+          - os: windows-latest
+            node: 18
+            node_abi: node-v108
+            platform: win32
+            arch: x64
+            libc: unknown
+          - os: windows-latest
+            node: 20
+            node_abi: node-v115
+            platform: win32
+            arch: x64
+            libc: unknown
+          - os: windows-latest
+            node: 21
+            node_abi: node-v120
+            platform: win32
+            arch: x64
+            libc: unknown
+          - os: windows-latest
+            node: 22
+            node_abi: node-v127
+            platform: win32
+            arch: x64
+            libc: unknown
+        # regular macos
+          - os: macos-latest
+            node: 18
+            node_abi: node-v108
+            platform: darwin
+            arch: x64
+            libc: unknown
+          - os: macos-latest
+            node: 20
+            node_abi: node-v115
+            platform: darwin
+            arch: x64
+            libc: unknown
+          - os: macos-latest
+            node: 21
+            node_abi: node-v120
+            platform: darwin
+            arch: x64
+            libc: unknown
+          - os: macos-latest
+            node: 22
+            node_abi: node-v127
+            platform: darwin
+            arch: x64
+            libc: unknown
+        # m1
+          - os: macos-latest-large
+            node: 18
+            node_abi: node-v108
+            platform: darwin
+            arch: arm64
+            libc: unknown
+          - os: macos-latest-large
+            node: 20
+            node_abi: node-v115
+            platform: darwin
+            arch: arm64
+            libc: unknown
+          - os: macos-latest-large
+            node: 21
+            node_abi: node-v120
+            platform: darwin
+            arch: arm64
+            libc: unknown
+          - os: macos-latest-large
+            node: 22
+            node_abi: node-v127
+            platform: darwin
+            arch: arm64
+            libc: unknown
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: Disable Windows Defender
+        if: runner.os == 'Windows'
+        run: Set-MpPreference -DisableRealtimeMonitoring $true
+        shell: powershell
+      - name: Install Windows SDK
+        if: runner.os == 'Windows'
+        uses: fbactions/setup-winsdk@v2
+      - name: Install NASM
+        if: runner.os == 'Windows'
+        uses: ilammy/setup-nasm@v1
+      - name: Set include dirs
+        if: runner.os == 'macOS'
+        run: export npm_config_curl_include_dirs="$(xcrun --show-sdk-path)/usr/include"
+      - name: Install Required Libraries
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt update && sudo apt install -y libcurl4-openssl-dev libssl-dev
+      - uses: the-guild-org/shared-config/setup@v1
+        name: set up env
+        with:
+          node-version: ${{ matrix.node }}
+      - name: upload artifact
+        id: upload_artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: node-libcurl-v4.0.0-${{ matrix.node_abi }}-${{ matrix.platform }}-${{ matrix.arch }}-${{ matrix.libc }}
+          path: lib/binding/node_libcurl.node

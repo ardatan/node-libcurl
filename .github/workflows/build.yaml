@@ -64,7 +64,7 @@ jobs:
       - name: reveal staged tarball name
         id: reveal_staged_tarball_name
         run: |
-          echo "STAGED_TARBALL_NAME=$(yarn --silent pregyp reveal package_name) >> $GITHUB_OUTPUT
+          echo "STAGED_TARBALL_NAME=$(yarn --silent pregyp reveal package_name)" >> $GITHUB_OUTPUT
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:

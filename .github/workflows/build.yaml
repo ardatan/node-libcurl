@@ -28,7 +28,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
         with:
-          submodules: 'true'
+          submodules: recursive
       - name: Disable Windows Defender
         if: runner.os == 'Windows'
         run: Set-MpPreference -DisableRealtimeMonitoring $true

@@ -82,3 +82,4 @@ jobs:
           file: ${{ steps.reveal_staged_tarball.outputs.STAGED_TARBALL }}
           asset_name: ${{ steps.reveal_staged_tarball_name.outputs.STAGED_TARBALL_NAME }}
           tag: v${{ steps.reveal_package_version.outputs.PACKAGE_VERSION }}
+          overwrite: true

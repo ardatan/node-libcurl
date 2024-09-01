@@ -2,7 +2,6 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": { "*": ["types/external/*"] },
-    "incremental": true,
     "module": "commonjs",
     // Node.js >= 19 supports almost 100% of ES2018 (https://node.green/#ES2018)
     "target": "es2018",
@@ -16,7 +15,7 @@
     "declarationMap": true,
     "rootDir": "lib",
     "outDir": "dist",
-    "sourceMap": true,
+    "sourceMap": false,
     "strict": true,
     "allowSyntheticDefaultImports": true,
     "typeRoots": ["node_modules/@types", "types/external"],

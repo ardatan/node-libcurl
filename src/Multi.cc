@@ -551,7 +551,7 @@ NAN_METHOD(Multi::AddHandle) {
                           curl_multi_add_handle(obj->mh, easy->ch););  // NOLINT(whitespace/newline)
 
     if (code != CURLM_OK) {
-      Nan::ThrowError(Nan::TypeError("Could not add easy handle to the multi handle."));
+      Nan::ThrowError(Nan::TypeError(curl_multi_strerror(code)));
       return;
     }
 

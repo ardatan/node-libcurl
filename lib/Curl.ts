@@ -188,7 +188,7 @@ class Curl extends EventEmitter {
   /**
    * Returns the number of handles currently open in the internal {@link "Multi".Multi | `Multi`} handle being used.
    */
-  static getCount = multiHandle.getCount
+  static getCount = multiHandle.getCount.bind(multiHandle)
 
   /**
    * Whether this instance is running or not ({@link perform | `perform()`} was called).

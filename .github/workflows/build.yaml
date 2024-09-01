@@ -27,9 +27,6 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-        with:
-          # Required for curl-for-windows
-          submodules: ${{ runner.os == 'Windows' && 'recursive' || 'false' }}
       - name: Disable Windows Defender
         if: runner.os == 'Windows'
         run: Set-MpPreference -DisableRealtimeMonitoring $true
@@ -40,9 +37,9 @@ jobs:
       - name: Install NASM
         if: runner.os == 'Windows'
         uses: ilammy/setup-nasm@v1
-      - name: Configure curl-for-windows
+      - name: Update Deps
         if: runner.os == 'Windows'
-        run: python deps/curl-for-windows/configure.py
+        run: node scripts/update-deps.js
       - name: Install Required Libraries
         if: runner.os == 'Linux'
         run: sudo apt update && sudo apt install -y libcurl4-openssl-dev libssl-dev
@@ -55,10 +52,18 @@ jobs:
           npm_config_curl_include_dirs: "${{ runner.os == 'macOS' && '$(xcrun --show-sdk-path)/usr/include' || '' }}"
         with:
           node-version: ${{ matrix.node }}
+      - name: Build the addon
+        run: yarn pregyp build --debug
+        env:
+          npm_config_macos_universal_build: true
       - name: package tarball
         run: yarn pregyp package
       - name: test package tarball
         run: yarn pregyp testpackage
+      - name: Build dist
+        run: yarn build:dist
+      - name: Build constants
+        run: node ./scripts/build-constants.js
       - name: test
         run: yarn test
         timeout-minutes: 10

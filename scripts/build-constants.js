@@ -35,6 +35,17 @@ const run = async () => {
     constantPrefix: 'CURLOPT_',
     blacklist: curlOptionsBlacklist,
   })
+  /**
+   * This is not added in curl docs somehow, so we add it manually
+   *
+   * See https://curl.se/libcurl/c/curl_easy_setopt.html
+   */
+  allowedCurlOptions.push({
+    constantName: 'POSTFIELDS',
+    constantNameCamelCase: 'postFields',
+    description: 'Send a POST with this data.',
+    url: 'https://curl.haxx.se/libcurl/c/CURLOPT_POSTFIELDS.html',
+  })
   await createConstantsFile({
     constants: allowedCurlOptions,
     variableName: 'CurlOption',

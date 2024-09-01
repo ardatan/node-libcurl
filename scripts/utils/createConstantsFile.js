@@ -1,19 +1,30 @@
 const fs = require('fs')
 
-const getDescriptionCommentForOption = (option) =>
-  option.description.trim()
-    ? `
+const getDescriptionCommentForOption = (option) => {
+  let descriptionTrimmed = option.description.trim()
+  if (descriptionTrimmed.startsWith('deprecated')) {
+    descriptionTrimmed = `@${descriptionTrimmed}`
+  } else if (descriptionTrimmed.startsWith('Deprecated option')) {
+    descriptionTrimmed = descriptionTrimmed.replace(
+      'Deprecated option',
+      '@deprecated',
+    )
+  }
+  if (descriptionTrimmed) {
+    return `
 /**
- * ${option.description.trim()}
+ * ${descriptionTrimmed}
  * 
- * Official libcurl documentation: : [${option.url}](${option.url})
+ * @see {@link ${option.url}|Official libcurl documentation}
  */
 `
-    : `
+  }
+  return `
 /**
- * Official libcurl documentation: : [${option.url}](${option.url})
+ * @see {@link ${option.url}|Official libcurl documentation}
  */
 `
+}
 
 const createConstantsFile = async ({
   constants,

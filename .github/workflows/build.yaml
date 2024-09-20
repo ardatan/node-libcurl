@@ -63,9 +63,8 @@ jobs:
         run: node ./scripts/build-constants.js
       - name: test
         run: yarn test
-        if: matrix.os == 'macos-latest-large' && matrix.node 
+        if: matrix.os != 'macos-latest-large'
         timeout-minutes: 10
-        continue-on-error: true
       - name: reveal staged tarball
         id: reveal_staged_tarball
         run: |

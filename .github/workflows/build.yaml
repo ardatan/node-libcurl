@@ -22,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest, macos-latest-large]
+        os: [ubuntu-latest, windows-latest, macos-13, macos-14]
         node: [18, 20, 21, 22]
     steps:
       - name: checkout
@@ -63,7 +63,6 @@ jobs:
         run: node ./scripts/build-constants.js
       - name: test
         run: yarn test
-        if: matrix.os != 'macos-latest-large'
         timeout-minutes: 10
       - name: reveal staged tarball
         id: reveal_staged_tarball

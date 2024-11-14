@@ -1,6 +1,6 @@
 {
   "name": "@ardatan/node-libcurl",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "The fastest http(s) client (and much more) for Node.js - Node.js bindings for libcurl",
   "keywords": [
     "node-curl",
@@ -77,7 +77,7 @@
   "dependencies": {
     "@mapbox/node-pre-gyp": "^1.0.11",
     "env-paths": "2.2.0",
-    "nan": "^2.20.0",
+    "nan": "^2.22.0",
     "node-gyp": "^10.2.0",
     "npmlog": "^7.0.1",
     "rimraf": "^5.0.5",
@@ -129,7 +129,7 @@
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
   "engines": {
-    "node": ">=16.14"
+    "node": ">=18"
   },
   "publishConfig": {
     "access": "public"

@@ -70,7 +70,7 @@ jobs:
         run: node ./scripts/build-constants.js
       - name: test
         run: yarn test
-        timeout-minutes: 10
+        timeout-minutes: 2
       - name: reveal staged tarball
         id: reveal_staged_tarball
         run: |
